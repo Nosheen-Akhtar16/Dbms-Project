@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: #2f3a4a;
+            background-color: #f3f6fb;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1f2a39;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        nav a {
+            color: #edf2fb;
+            text-decoration: none;
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        nav a:hover {
+            background-color: rgba(255,255,255,0.12);
+            color: #ffffff;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #2b4f81 0%, #4a6da9 100%);
+            color: #ffffff;
+            text-align: center;
+            padding: 3rem 1rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.18);
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.03em;
+        }
+
+        header p {
+            font-size: 1.05rem;
+            opacity: 0.95;
+            max-width: 720px;
+            margin: 0.85rem auto 0;
+            line-height: 1.9;
+        }
+
+        .header-values {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin: 2rem auto 0;
+            max-width: 960px;
+        }
+
+        .value-card {
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 18px;
+            padding: 1rem 1.2rem;
+            text-align: left;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+        }
+
+        .value-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.24);
+            margin-bottom: 0.85rem;
+            font-size: 1.2rem;
+        }
+
+        .value-card p {
+            color: #eef2fb;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .form-sections {
+            margin-top: 3rem;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(47,58,74,0.08);
+        }
+
+        .form-sections h2 {
+            margin-bottom: 0.5rem;
+            color: #1f2a39;
+        }
+
+        .form-sections p {
+            color: #576275;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-section-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .form-section-card {
+            background: #f8fbff;
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid #e4ecf7;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-section-card:hover {
+            transform: translateY(-4px);
+            border-color: #b0c7ee;
+            box-shadow: 0 12px 24px rgba(47,58,74,0.08);
+        }
+
+        .form-section-card h4 {
+            margin-bottom: 0.75rem;
+            color: #1f2a39;
+        }
+
+        .form-section-card p {
+            margin-bottom: 1rem;
+            color: #5b6b80;
+            line-height: 1.65;
+        }
+
+        .form-section-card button {
+            margin-top: 0.5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #2c6df1;
+            color: white;
+            padding: 0.75rem 1.3rem;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.25s ease, transform 0.2s ease;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            background-color: #214fc1;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background-color: #1f2a39;
+        }
+
+        .btn-primary:hover {
+            background-color: #111923;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .intro-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        /* Sections Grid */
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .card-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            background-color: #e8eff9;
+            color: #3d5e8f;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            color: #1f2a39;
+            margin-bottom: 1rem;
+            font-size: 1.35rem;
+        }
+
+        .card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-primary {
+            background-color: #667eea;
+        }
+
+        .btn-primary:hover {
+            background-color: #5568d3;
+        }
+
+        /* Section Details */
+        .section-detail {
+            display: none;
+            margin: 2rem 0;
+            padding: 2rem;
+            background-color: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+
+        .section-detail.active {
+            display: block;
+        }
+
+        .section-detail h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .section-detail ul {
+            margin-left: 2rem;
+            color: #555;
+        }
+
+        .section-detail li {
+            margin: 0.5rem 0;
+        }
+
+        .form-frame {
+            width: 100%;
+            min-height: 500px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }
+
+        .form-frame iframe {
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            border: none;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .sections-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#doctors">Doctors</a></li>
+            <li><a href="#patients">Patients</a></li>
+            <li><a href="#billing">Billing</a></li>
+            <li><a href="#treatment">Treatment</a></li>
+            <li><a href="#appointments">Appointments</a></li>
+            <li><a href="#workflows">Workflows</a></li>
+        </ul>
+    </nav>
+
+    <!-- Header -->
+    <header id="home">
+        <h1>Hospital Management System</h1>
+        <p>Manage doctors, patients, appointments, and billing with a streamlined workflow built for modern healthcare teams.</p>
+        <div class="header-values">
+            <div class="value-card">
+                <div class="value-icon">🩺</div>
+                <p>Clinician management with structured credential and schedule records.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">📋</div>
+                <p>Workflow-driven processes that keep data entry reliable and consistent.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">📅</div>
+                <p>Appointment booking and tracking with professional clarity.</p>
+            </div>
+        </div>
+        <p>Choose a workflow below to open the right process and complete hospital operations efficiently.</p>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Introduction -->
+        <div class="intro-section">
+            <h2>Professional hospital operations in one platform</h2>
+            <p>Centralize your workflows for doctors, patients, appointments, treatments, and billing with a clean, workflow-based system built for healthcare teams.</p>
+        </div>
+
+        <!-- Main Sections Grid -->
+        <div class="sections-grid">
+            <!-- Doctors Section -->
+            <div class="card" id="doctors" onclick="toggleSection('doctors')">
+                <div class="card-icon">👨‍⚕️</div>
+                <h3>Doctor Management</h3>
+                <p>Manage doctor profiles, specializations, and schedules</p>
+                <button class="btn">View Details</button>
+            </div>
+
+            <!-- Patients Section -->
+            <div class="card" id="patients" onclick="toggleSection('patients')">
+                <div class="card-icon">🧑‍⚕️</div>
+                <h3>Patient Management</h3>
+                <p>Register and manage patient records and medical history</p>
+                <button class="btn">View Details</button>
+            </div>
+
+            <!-- Billing Section -->
+            <div class="card" id="billing" onclick="toggleSection('billing')">
+                <div class="card-icon">💰</div>
+                <h3>Billing & Payments</h3>
+                <p>Generate invoices and manage payment transactions</p>
+                <button class="btn">View Details</button>
+            </div>
+
+            <!-- Treatment Section -->
+            <div class="card" id="treatment" onclick="toggleSection('treatment')">
+                <div class="card-icon">💊</div>
+                <h3>Treatment Plans</h3>
+                <p>Create and monitor patient treatment programs</p>
+                <button class="btn">View Details</button>
+            </div>
+
+            <!-- Appointments Section -->
+            <div class="card" id="appointments" onclick="toggleSection('appointments')">
+                <div class="card-icon">📅</div>
+                <h3>Appointments</h3>
+                <p>Schedule and manage doctor-patient appointments</p>
+                <button class="btn">View Details</button>
+            </div>
+        </div>
+
+        <div class="form-sections" id="workflows">
+            <h2>Operational workflows</h2>
+            <p>Select a workflow below to open the corresponding tool and complete the task efficiently.</p>
+            <div class="form-section-grid">
+                <div class="form-section-card" onclick="openWorkflow('doctor.html')">
+                    <h4>Add Doctor</h4>
+                    <p>Add new doctors and manage their profiles and information.</p>
+                    <button class="btn btn-primary">Add Doctor</button>
+                </div>
+                <div class="form-section-card" onclick="openWorkflow('patient.html')">
+                    <h4>Add Patient</h4>
+                    <p>Add new patients and manage their records and information.</p>
+                    <button class="btn btn-primary">Add Patient</button>
+                </div>
+                <div class="form-section-card" onclick="openWorkflow('appointment.html')">
+                    <h4>Book Appointment</h4>
+                    <p>Schedule appointments and manage bookings.</p>
+                    <button class="btn btn-primary">Book Appointment</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Details -->
+        <div id="doctors-detail" class="section-detail">
+            <h2>👨‍⚕️ Doctor Management</h2>
+            <p>The Doctor Management system allows you to:</p>
+            <ul>
+                <li>Add and update doctor profiles</li>
+                <li>Specify medical specializations</li>
+                <li>Manage availability and schedules</li>
+                <li>View doctor ratings and reviews</li>
+                <li>Assign patients to doctors</li>
+            </ul>
+        </div>
+
+        <div id="patients-detail" class="section-detail">
+            <h2>🧑‍⚕️ Patient Management</h2>
+            <p>The Patient Management system allows you to:</p>
+            <ul>
+                <li>Register new patients</li>
+                <li>Maintain complete medical records</li>
+                <li>Track medical history and diagnoses</li>
+                <li>Store emergency contact information</li>
+                <li>Monitor patient health status</li>
+            </ul>
+        </div>
+
+        <div id="billing-detail" class="section-detail">
+            <h2>💰 Billing & Payments</h2>
+            <p>The Billing system allows you to:</p>
+            <ul>
+                <li>Generate detailed invoices</li>
+                <li>Track payment transactions</li>
+                <li>Manage insurance claims</li>
+                <li>Generate financial reports</li>
+                <li>Process refunds and adjustments</li>
+            </ul>
+        </div>
+
+        <div id="treatment-detail" class="section-detail">
+            <h2>💊 Treatment Plans</h2>
+            <p>The Treatment Management system allows you to:</p>
+            <ul>
+                <li>Create personalized treatment plans</li>
+                <li>Prescribe medications</li>
+                <li>Schedule therapy sessions</li>
+                <li>Track patient progress</li>
+                <li>Update treatment status</li>
+            </ul>
+        </div>
+
+        <div id="appointments-detail" class="section-detail">
+            <h2>📅 Appointments</h2>
+            <p>The Appointment Management system allows you to:</p>
+            <ul>
+                <li>Schedule doctor-patient appointments</li>
+                <li>Send appointment reminders</li>
+                <li>Manage appointment cancellations</li>
+                <li>View appointment history</li>
+                <li>Optimize doctor schedules</li>
+            </ul>
+        </div>
+
+        <div id="workflows-detail" class="section-detail">
+            <h2 id="workflow-title">📝 Workflow Preview</h2>
+            <p>Attach any workflow page here by opening it from the workflow card above.</p>
+            <div class="form-frame">
+                <iframe id="workflow-iframe" src="doctor.html" title="Add Doctor" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Hospital Management System. All rights reserved.</p>
+        <p>Providing efficient healthcare management solutions</p>
+    </footer>
+
+    <script>
+        function toggleSection(sectionId) {
+            const detailId = sectionId + '-detail';
+            const detail = document.getElementById(detailId);
+            const allDetails = document.querySelectorAll('.section-detail');
+            
+            allDetails.forEach(d => {
+                if (d.id !== detailId) {
+                    d.classList.remove('active');
+                }
+            });
+            
+            detail.classList.toggle('active');
+            
+            if (detail.classList.contains('active')) {
+                detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function openWorkflow(workflowPage) {
+            const workflowIframe = document.getElementById('workflow-iframe');
+            const workflowTitle = document.getElementById('workflow-title');
+            workflowIframe.src = workflowPage;
+            workflowIframe.title = workflowPage === 'doctor.html' ? 'Add Doctor' : workflowPage === 'patient.html' ? 'Add Patient' : workflowPage === 'appointment.html' ? 'Book Appointment' : 'Workflow Preview';
+            workflowTitle.textContent = workflowPage === 'doctor.html' ? '👨‍⚕️ Add Doctor' : workflowPage === 'patient.html' ? '🧑‍⚕️ Add Patient' : workflowPage === 'appointment.html' ? '📅 Book Appointment' : '📝 Workflow Preview';
+            const detail = document.getElementById('workflows-detail');
+            detail.classList.add('active');
+            detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
